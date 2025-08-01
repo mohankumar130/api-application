@@ -69,20 +69,25 @@ pipeline {
     post {
         success {
             echo "✅ Deployed Docker Image: ${IMAGE_NAME}:${VERSION}"
-            echo "📡 Sending New Relic Deployment Notification..."
 
-            sh """
-            curl -X POST https://api.newrelic.com/v2/applications/${NEW_RELIC_APP_ID}/deployments.json \
-            -H "X-Api-Key:${NEW_RELIC_API_KEY}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "deployment": {
-                "revision": "${GIT_COMMIT}",
-                "description": "Deployed ${IMAGE_NAME}:${VERSION} via Jenkins",
-                "user": "jenkins"
-              }
-            }'
-            """
+            withCredentials([
+                string(credentialsId: 'NEW_RELIC_API_KEY', variable: 'NEW_RELIC_API_KEY'),
+                string(credentialsId: 'NEW_RELIC_APP_ID', variable: 'NEW_RELIC_APP_ID')
+            ]) {
+                sh '''
+                    echo "📡 Sending New Relic deployment notification..."
+                    curl -X POST https://api.newrelic.com/v2/applications/${NEW_RELIC_APP_ID}/deployments.json \
+                         -H "X-Api-Key: ${NEW_RELIC_API_KEY}" \
+                         -H "Content-Type: application/json" \
+                         -d '{
+                            "deployment": {
+                                "revision": "'"${GIT_COMMIT_HASH}"'",
+                                "description": "Deployed ${IMAGE_NAME}:${VERSION} via Jenkins",
+                                "user": "jenkins"
+                            }
+                         }' --insecure
+                '''
+            }
         }
 
         failure {
