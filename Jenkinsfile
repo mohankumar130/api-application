@@ -71,8 +71,8 @@ pipeline {
             echo "✅ Deployed Docker Image: ${IMAGE_NAME}:${VERSION}"
 
             withCredentials([
-                string(credentialsId: 'NEW_RELIC_API_KEY', variable: 'NEW_RELIC_API_KEY'),
-                string(credentialsId: 'NEW_RELIC_APP_ID', variable: 'NEW_RELIC_APP_ID')
+                string(credentialsId: 'new_relic_api_key', variable: 'NEW_RELIC_API_KEY'),
+                string(credentialsId: 'new_relic_app_id', variable: 'NEW_RELIC_APP_ID')
             ]) {
                 sh '''
                     echo "📡 Sending New Relic deployment notification..."
