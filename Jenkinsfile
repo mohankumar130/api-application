@@ -42,7 +42,6 @@ pipeline {
                 sh """
                     docker run -d --name ${CONTAINER_NAME} \
                     --env-file .env \
-                    -e NEW_RELIC_LICENSE_KEY=${NEW_RELIC_LICENSE_KEY} \
                     -p ${DOCKER_PORT}:3000 \
                     ${IMAGE_NAME}:${VERSION}
                 """
