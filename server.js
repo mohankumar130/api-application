@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import apiRoutes from './api/index.js';
 import cors from 'cors';
 import profileRoute from './api/profile.js';
+import './newrelic.js'
 
 dotenv.config();
 

@@ -6,6 +6,7 @@ pipeline {
         CONTAINER_NAME = 'api-application-login'
         DOCKER_PORT = '3000'
         VERSION = "${env.BUILD_NUMBER}"
+        NEW_RELIC_LICENSE_KEY = credentials('NEW_RELIC_KEY')
     }
 
     stages {
@@ -38,7 +39,7 @@ pipeline {
 
         stage('Run New Container') {
             steps {
-                sh "docker run -d --name \$CONTAINER_NAME --env-file .env -p \$DOCKER_PORT:3000 \$IMAGE_NAME:\$VERSION"
+                sh "docker run -d --name \$CONTAINER_NAME --env-file .env -e NEW_RELIC_LICENSE_KEY=97f3d326ecdbcfb291dbc115d7d15a25FFFFNRAL -p \$DOCKER_PORT:3000 \$IMAGE_NAME:\$VERSION"
             }
         }
 
